@@ -56,24 +56,37 @@ fs.mkdir('dir1', (err)=>{
 
 const http = require('http');
 
-const server = http.createServer((req,res)=>{
-    res.setHeader('Content-Type','text/html');
-    if(req.url == "/login"){
-        res.write('<html><head><title> node js class</title></head><body>');
-        res.write('<h1> Hello, Login! </h1>');
-        res.write('</body></html>');
+const server = http.createServer((req, res) => {
+    res.setHeader('Content-Type', 'text/html');
+    if(req.url == '/login'){
+        fs.readFile('login.html', (err, data) => {
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.write('Error: Unable to load the page');
+            } else {
+                res.writeHead(200);
+                res.write(data);
+            }
+            res.end();
+        });
     }
     else{
-        res.write('<html><head><title> node js class</title></head><body>');
-        res.write('<h1> Hello, World! </h1>');
-        res.write('</body></html>');
+        fs.readFile('index.html', (err, data) => {
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.write('Error: Unable to load the page');
+            } else {
+                res.writeHead(200);
+                res.write(data);
+            }
+            res.end();
+        });
     }
-    res.end();
-})
+});
 
 const port = 3000;
-const host = 'localhost'
+const host = 'localhost';
 
-server.listen(port,host,()=>{
-    console.log(`server is listening to on http://${host}:${port}` );
+server.listen(port, host, () => {
+    console.log(`Server is listening on http://${host}:${port}`);
 });
